@@ -1,4 +1,4 @@
-﻿using System.CodeDom.Compiler;
+using System.CodeDom.Compiler;
 using System.Collections.Generic;
 using System.Collections;
 using System.ComponentModel;
@@ -16,30 +16,34 @@ class Result
 {
 
     /*
-     * Complete the 'plusMinus' function below.
+     * Complete the 'breakingRecords' function below.
      *
-     * The function accepts INTEGER_ARRAY arr as parameter.
+     * The function is expected to return an INTEGER_ARRAY.
+     * The function accepts INTEGER_ARRAY scores as parameter.
      */
 
-    public static void plusMinus(List<int> arr)
+    public static List<int> breakingRecords(List<int> scores)
     {
-        double n = arr.Count;
-        double plus = 0, minus = 0, zeros = 0;
-        foreach (var i in arr)
+int maxRec = scores[0], minRec = scores[0];
+        int maxCount=0, minCount=0;
+        foreach(var i in scores)
         {
-            if (i > 0)
-                plus++;
-            if (i < 0)
-                minus++;
-            if (i == 0)
-                zeros++;
+            if (i > maxRec)
+            {
+                maxCount++;
+                maxRec = i;
+            }
+            if (i < minRec)
+            {
+                minCount++;
+                minRec = i;
+            }
         }
-        string nplus = (plus / n).ToString("0.000000");
-        string nminus = (minus / n).ToString("0.000000");
-        string nzeros = (zeros / n).ToString("0.000000"); ;
-        System.Console.WriteLine("{0} ", nplus);
-        System.Console.WriteLine("{0} ", nminus);
-        System.Console.WriteLine("{0} ", nzeros);
+        List<int> result=new List<int>();
+        result.Add(maxCount);
+        result.Add(minCount);
+        
+        return result;
     }
 
 }
@@ -48,10 +52,17 @@ class Solution
 {
     public static void Main(string[] args)
     {
+        TextWriter textWriter = new StreamWriter(@System.Environment.GetEnvironmentVariable("OUTPUT_PATH"), true);
+
         int n = Convert.ToInt32(Console.ReadLine().Trim());
 
-        List<int> arr = Console.ReadLine().TrimEnd().Split(' ').ToList().Select(arrTemp => Convert.ToInt32(arrTemp)).ToList();
+        List<int> scores = Console.ReadLine().TrimEnd().Split(' ').ToList().Select(scoresTemp => Convert.ToInt32(scoresTemp)).ToList();
 
-        Result.plusMinus(arr);
+        List<int> result = Result.breakingRecords(scores);
+
+        textWriter.WriteLine(String.Join(" ", result));
+
+        textWriter.Flush();
+        textWriter.Close();
     }
 }
